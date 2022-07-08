@@ -28,11 +28,11 @@ function ProductItem({ product }) {
         <p>${ product.price }</p>
 
         {/* c. Add to Cart Btn */}
-        <buton className="primary-button" type="button">
+        <button className="primary-button" type="button">
             Add to cart
-        </buton>
+        </button>
       </div>
-      
+
     </div>
   )
 }
