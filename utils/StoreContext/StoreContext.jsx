@@ -10,7 +10,7 @@ function StoreContextProvider({ children }) {
     const [ state, dispatch ] = useReducer(StoreReducer, initialState);
 
     return (
-    <StoreContext.Provider value={{  }}>
+    <StoreContext.Provider value={{ state, dispatch }}>
       { children }
     </StoreContext.Provider>
   )

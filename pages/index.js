@@ -1,5 +1,3 @@
-// import React ,{ useContext } from 'react';
-// import { StoreContext } from '../utils/StoreContext/StoreContext';
 import Layout from '../components/Layout'
 import data from '../utils/data'
 import ProductItem from '../components/ProductItem'

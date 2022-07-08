@@ -1,8 +1,14 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
+import { StoreContext } from '../utils/StoreContext/StoreContext';
 import Link from 'next/link';
 import Head from 'next/head';
 
 function Layout({ children, title }) {
+
+    // Context for adding qty
+    const { state, dispatch } = useContext(StoreContext);
+    const { cart } = state;
+
   return (
     <Fragment>
         <Head>
@@ -19,8 +25,21 @@ function Layout({ children, title }) {
                         <a className="text-lg font-bold">amazon</a>
                     </Link>
                     <div>
-                        <Link href="/cart"><a className="p-2">Cart</a></Link>
-                        <Link href="/cart"><a className="p-2">Login</a></Link>
+                        {/* Cart */}
+                        <Link href="/cart">
+                            {/* *** Add quantity Condition*** */}
+                            <a className="p-2">Cart { cart.cartItems.length > 0 ?
+                            <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+                                { cart.cartItems.reduce((a, i) => a + i.quantity, 0 ) }
+                            </span> 
+                            : 
+                            "" }</a>
+                            {/* ************************************* */}
+                        </Link>
+                        {/* Login */}
+                        <Link href="/cart">
+                            <a className="p-2">Login</a>
+                        </Link>
                     </div>
                 </nav>
             </header>

@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { StoreContext } from '../../utils/StoreContext/StoreContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import Layout from '../../components/Layout'
@@ -6,9 +7,28 @@ import { useRouter } from 'next/router';
 import data from '../../utils/data';
 
 function ProductScreen() {
+
+    // Route params to render single product view
     const { query } = useRouter(); // get url
     const { slug } = query; // get slug item from url
     const product = data.products.find((product)=> product.slug === slug); // use slug to seach for individual product
+    
+    // Context for add to cart
+    const { dispatch, state } = useContext(StoreContext);
+    
+    // functions to add to cart and update qty
+    const addToCartHandler = () => {
+        const existingProduct = state.cart.cartItems.find((item)=> item.slug === slug);
+        const quantity = existingProduct ? parseInt(existingProduct.quantity) + 1 : 1; // need to declare this becoz if product does not existing, there is no qty variable to increment
+        if(quantity > product.countInStock) {
+            alert('Sorry, product is out of stock!');
+            return;
+        }
+
+        dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity: quantity } })
+    }
+    
+    // Rendering
     if(!product) return <div>Product Not Found</div>
 
     return (
@@ -19,7 +39,7 @@ function ProductScreen() {
             <Link href="/">back to products</Link>
         </div>
 
-        {/* PRODUCT INFO - 3 columns */}
+        {/* PRODUCT INFO - 3 columns merged from 4 cols */}
         <div className="grid md:grid-cols-4 md:gap-3">
             {/* Note: 2 columns of 4 columns - col-span-2 */}
             {/* a. image (col - 1)*/}
@@ -58,7 +78,9 @@ function ProductScreen() {
                         <div>{ product.countInStock > 0 ? 'In stock' : 'Unavailable' }</div>
                     </div>
                     {/* iii. add to cart */}
-                    <button className="primary-button w-full">Add to cart</button>
+                    <button className="primary-button w-full" onClick={ addToCartHandler }>
+                        Add to cart
+                    </button>
                 </div>
             </div>
         </div>
