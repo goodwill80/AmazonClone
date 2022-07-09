@@ -6,7 +6,7 @@ import Head from 'next/head';
 function Layout({ children, title }) {
 
     // Context for adding qty
-    const { state, dispatch } = useContext(StoreContext);
+    const { state } = useContext(StoreContext);
     const { cart } = state;
 
   return (

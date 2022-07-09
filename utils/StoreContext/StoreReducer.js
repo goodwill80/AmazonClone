@@ -11,7 +11,12 @@ function StoreReducer(state, action) {
                 item.name === checkExisting.name ? newItem : item )) // if newitem exist, we still need to replace it, as the quantify has changed
                 : [...state.cart.cartItems, newItem];
             return { ...state, cart: { ...state.cart, cartItems: cartItems } }
-
+        // Case 2
+        case 'CART_REMOVE_ITEM':
+            const items = state.cart.cartItems.filter((item)=>(
+                item.slug !== action.payload.slug ))
+            return { ...state, cart: {...state.cart, cartItems: items }}
+        // Default
         default: 
             return state;
     }

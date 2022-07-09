@@ -6,6 +6,7 @@ import Layout from '../../components/Layout'
 import { useRouter } from 'next/router';
 import data from '../../utils/data';
 
+// [slug].js
 function ProductScreen() {
 
     // Route params to render single product view
@@ -13,6 +14,9 @@ function ProductScreen() {
     const { slug } = query; // get slug item from url
     const product = data.products.find((product)=> product.slug === slug); // use slug to seach for individual product
     
+    // function to re-route to another page - please see addToCartHandler
+    const router = useRouter();
+
     // Context for add to cart
     const { dispatch, state } = useContext(StoreContext);
     
@@ -24,8 +28,8 @@ function ProductScreen() {
             alert('Sorry, product is out of stock!');
             return;
         }
-
         dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity: quantity } })
+        router.push('/cart'); // redirect user to the cart page
     }
     
     // Rendering

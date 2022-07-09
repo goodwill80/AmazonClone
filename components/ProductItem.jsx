@@ -1,8 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
+import { StoreContext } from '../utils/StoreContext/StoreContext'
+import { useRouter } from 'next/router';
 
 function ProductItem({ product }) {
+    //Context
+    const { dispatch, state } = useContext(StoreContext);
+
+    // For redirection
+    const router = useRouter();
+
+     // functions to add to cart and update qty
+     const addToCartHandler = () => {
+        const existingProduct = state.cart.cartItems.find((item)=> item.slug === product.slug);
+        const quantity = existingProduct ? parseInt(existingProduct.quantity) + 1 : 1; // need to declare this becoz if product does not existing, there is no qty variable to increment
+        if(quantity > product.countInStock) {
+            alert('Sorry, product is out of stock!');
+            return;
+        }
+        dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity: quantity } })
+        router.push('/cart');
+    }
+
   return (
     <div className="card">
 
@@ -28,7 +48,7 @@ function ProductItem({ product }) {
         <p>${ product.price }</p>
 
         {/* c. Add to Cart Btn */}
-        <button className="primary-button" type="button">
+        <button className="primary-button" type="button" onClick={ addToCartHandler }>
             Add to cart
         </button>
       </div>
