@@ -20,6 +20,12 @@ function CartScreen() {
         dispatch({ type: "CART_REMOVE_ITEM", payload: item });
     }
 
+    // Function to update number of products in cart using the same reducer as "Add to cart"
+    const updateCartHandler = (item, qty)=> {
+        const quantity = Number(qty);
+        dispatch({ type: "CART_ADD_ITEM", payload: {...item, quantity } }); // notice that we are passing the new qty directly in the destructure payload
+    }
+
   return (
     <Layout title="Shopping Cart">
         <h1 className="mb-4 text-xl">Shopping Cart</h1>
@@ -62,7 +68,15 @@ function CartScreen() {
                                     </Link>
                                 </td>
                                 {/* b. Quantity */}
-                                <td className="p-5 text-right">{ item.quantity }</td>
+                                <td className="p-5 text-right">
+                                    <select value={ item.quantity } onChange={(e)=>updateCartHandler(item, e.target.value)}>
+                                    { [...Array(item.countInStock).keys()].map((x, index)=> ( // get the index of each countInStock
+                                            <option key={ index }>
+                                                { x + 1}
+                                            </option>
+                                    ))}
+                                    </select>
+                                </td>
                                 {/* c. Price */}
                                 <td className="p-5 text-right">{ item.price }</td>
                                 {/* d. Action icon */}
